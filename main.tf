@@ -25,7 +25,7 @@ variable "db_password" {
 
 variable "ami_id" {
   type    = string
-  default = "ami-08e4e35cccc6189f4"
+  default = "ami-0b82099e11676457f"
 }
 
 # variable "db_dsn" {
@@ -285,17 +285,15 @@ data "template_file" "userdata" {
 
 resource "aws_launch_template" "demo_lt" {
   name_prefix   = "demo-lt-"
-  image_id      = var.ami_id # Example Amazon Linux 2 in us-west-2. Update for your region
+  image_id      = ami-0b82099e11676457f # Example Amazon Linux 2 in us-west-2. Update for your region
   instance_type = "t2.micro"
-
-  user_data = base64encode(data.template_file.userdata.rendered)
 
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
 
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name = "demo-ec2"
+      Name = "java-tomcat-ec2"
     }
   }
 }
