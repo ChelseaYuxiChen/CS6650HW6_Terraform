@@ -25,7 +25,7 @@ variable "db_password" {
 
 variable "ami_id" {
   type    = string
-  default = "ami-0b82099e11676457f"
+  default = "ami-08bd864139d8cfadb"
 }
 
 # variable "db_dsn" {
@@ -195,8 +195,8 @@ resource "aws_db_instance" "mysql_demo" {
   db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   skip_final_snapshot    = true
-  deletion_protection    = false
-  publicly_accessible    = false
+  deletion_protection    = true
+  publicly_accessible    = true
 
   tags = {
     Name = "demo-mysql-db"
@@ -285,7 +285,7 @@ data "template_file" "userdata" {
 
 resource "aws_launch_template" "demo_lt" {
   name_prefix   = "demo-lt-"
-  image_id      = ami-0b82099e11676457f # Example Amazon Linux 2 in us-west-2. Update for your region
+  image_id      = "ami-08bd864139d8cfadb" # Example Amazon Linux 2 in us-west-2. Update for your region
   instance_type = "t2.micro"
 
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
@@ -302,7 +302,7 @@ resource "aws_autoscaling_group" "demo_asg" {
   name             = "demo-asg"
   max_size         = 3
   min_size         = 1
-  desired_capacity = 2
+  desired_capacity = 1
   launch_template {
     id      = aws_launch_template.demo_lt.id
     version = "$Latest"
